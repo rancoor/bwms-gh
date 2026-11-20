@@ -92,26 +92,86 @@ def item_overview() -> None:
         FROM production.stack_movements
         WHERE moved_at >= now() - interval '7 days'""")[0]["movements"]
 
-    st.markdown("""<style>
-    .welcome-panel {
-      padding: 1.7rem 1.9rem; border-radius: 16px;
-      border: 1px solid rgba(128,128,128,.20);
-      border-left: 5px solid var(--primary-color);
-      background: linear-gradient(115deg, var(--secondary-background-color), var(--background-color));
-      margin: .3rem 0 1.2rem 0;
+    st.html("""<style>
+    .warehouse-hero {
+      position: relative; isolation: isolate; overflow: hidden;
+      display: grid; grid-template-columns: .95fr 1.05fr; align-items: center;
+      width: calc(100% + 3rem); min-height: min(75vh, 760px); padding: clamp(2.25rem, 5.5vw, 4.75rem);
+      margin: 0 0 1.6rem -1.5rem; border-radius: 28px;
+      color: #f7fbff;
+      background:
+        radial-gradient(ellipse at 82% 18%, rgba(240, 107, 79, .42), transparent 34%),
+        radial-gradient(ellipse at 8% 100%, rgba(246, 184, 76, .17), transparent 35%),
+        linear-gradient(118deg, #10283d 0%, #263c56 48%, #70454e 100%);
+      box-shadow: 0 22px 58px rgba(14, 43, 59, .22);
     }
-    .welcome-eyebrow { color: var(--primary-color); font-size: .78rem; font-weight: 700;
-      letter-spacing: .12em; text-transform: uppercase; margin-bottom: .35rem; }
-    .welcome-title { color: var(--text-color); font-size: clamp(1.8rem, 3vw, 2.6rem);
-      line-height: 1.1; font-weight: 750; margin: 0; }
-    .welcome-copy { color: var(--text-color); opacity: .78; font-size: 1.02rem;
-      margin: .6rem 0 0 0; }
+    .warehouse-hero::after {
+      content: ""; position: absolute; z-index: -1; width: 390px; height: 390px;
+      right: -130px; bottom: -250px; border: 1px solid rgba(255,255,255,.16);
+      border-radius: 50%; box-shadow: 0 0 0 34px rgba(255,255,255,.035), 0 0 0 70px rgba(255,255,255,.025);
+    }
+    .hero-copy { position: relative; z-index: 1; max-width: 640px; }
+    .hero-kicker { display: inline-flex; align-items: center; gap: .55rem;
+      color: #ffb5a5; font-size: .76rem; font-weight: 800; letter-spacing: .15em;
+      text-transform: uppercase; margin-bottom: 1.15rem; }
+    .hero-kicker::before { content: ""; width: 24px; height: 2px; background: #f5bd58; }
+    .hero-title { color: #fff !important; font-size: clamp(2.7rem, 5.4vw, 5.15rem);
+      line-height: .98; letter-spacing: -.055em; font-weight: 780; margin: 0;
+      text-wrap: balance; }
+    .hero-title span { color: #F06B4F; }
+    .hero-description { max-width: 500px; margin: 1.15rem 0 0; color: rgba(247,251,255,.82);
+      font-size: clamp(1rem, 1.5vw, 1.16rem); line-height: 1.65; }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.55rem; }
+    .hero-tag { padding: .48rem .78rem; color: #effcf8; font-size: .78rem; font-weight: 650;
+      border: 1px solid rgba(210,255,244,.25); border-radius: 999px;
+      background: rgba(12,35,51,.28); }
+    .hero-art { position: relative; z-index: 1; width: 100%; max-width: 570px;
+      justify-self: end; filter: drop-shadow(0 18px 32px rgba(4,20,31,.22)); }
+    .hero-art svg { display: block; width: 100%; height: auto; }
+    @media (max-width: 760px) {
+      .warehouse-hero { width: 100%; margin-left: 0; grid-template-columns: 1fr; min-height: min(75vh, 700px); padding: 2rem 1.5rem; }
+      .hero-art { width: min(100%, 460px); justify-self: center; margin-top: 1.2rem; }
+      .hero-title { font-size: clamp(2.6rem, 12vw, 4.3rem); }
+    }
     </style>
-    <section class="welcome-panel">
-      <div class="welcome-eyebrow">Warehouse overview · live database</div>
-      <h1 class="welcome-title">Your stock, in view.</h1>
-      <p class="welcome-copy">See what is in bond, where it is stored, and what has moved recently.</p>
-    </section>""", unsafe_allow_html=True)
+    <section class="warehouse-hero" aria-label="Bonded warehouse overview">
+      <div class="hero-copy">
+        <div class="hero-kicker">Bonded warehouse · live operations</div>
+        <h1 class="hero-title">Bonded stock.<br><span>Clear oversight.</span></h1>
+        <p class="hero-description">A clear view of every arrival, every location, and every movement through your warehouse.</p>
+        <div class="hero-tags"><span class="hero-tag">Inventory at a glance</span><span class="hero-tag">Movement tracking</span><span class="hero-tag">Expiry watch</span></div>
+      </div>
+      <div class="hero-art">
+        <svg viewBox="0 0 600 390" role="img" aria-label="Illustration of organized bonded warehouse storage racks">
+          <defs>
+            <linearGradient id="rack" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#eaf7f3"/><stop offset="1" stop-color="#b9e4d8"/></linearGradient>
+            <linearGradient id="box" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#f9ca70"/><stop offset="1" stop-color="#e99e43"/></linearGradient>
+            <linearGradient id="floor" x1="0" x2="1"><stop stop-color="#77d9c1" stop-opacity=".16"/><stop offset="1" stop-color="#b6f1df" stop-opacity=".04"/></linearGradient>
+          </defs>
+          <ellipse cx="317" cy="346" rx="258" ry="26" fill="url(#floor)"/>
+          <path d="M76 324V70h432v254M76 151h432M76 235h432M76 324h432" fill="none" stroke="url(#rack)" stroke-width="10" stroke-linejoin="round"/>
+          <path d="M94 83h396M94 165h396M94 249h396" stroke="#8acabb" stroke-width="3" opacity=".8"/>
+          <g stroke="#a65f32" stroke-width="2">
+            <rect x="111" y="97" width="75" height="48" rx="6" fill="url(#box)"/><path d="M149 98v46M111 112h75" fill="none" opacity=".55"/>
+            <rect x="203" y="91" width="103" height="54" rx="6" fill="#83d7bf"/><path d="M254 93v50M204 109h101" fill="none" opacity=".55"/>
+            <rect x="326" y="100" width="72" height="45" rx="6" fill="url(#box)"/><path d="M362 101v43M327 114h70" fill="none" opacity=".55"/>
+            <rect x="417" y="89" width="65" height="56" rx="6" fill="#83d7bf"/><path d="M449 91v53M418 108h63" fill="none" opacity=".55"/>
+            <rect x="112" y="181" width="105" height="53" rx="6" fill="#83d7bf"/><path d="M164 183v49M113 199h103" fill="none" opacity=".55"/>
+            <rect x="234" y="177" width="73" height="57" rx="6" fill="url(#box)"/><path d="M270 179v53M235 197h71" fill="none" opacity=".55"/>
+            <rect x="325" y="185" width="94" height="49" rx="6" fill="#83d7bf"/><path d="M372 187v45M326 201h92" fill="none" opacity=".55"/>
+            <rect x="435" y="177" width="47" height="57" rx="6" fill="url(#box)"/><path d="M458 179v53M436 197h45" fill="none" opacity=".55"/>
+            <rect x="112" y="264" width="73" height="48" rx="6" fill="url(#box)"/><path d="M148 266v44M113 280h71" fill="none" opacity=".55"/>
+            <rect x="202" y="260" width="99" height="52" rx="6" fill="#83d7bf"/><path d="M251 262v48M203 278h97" fill="none" opacity=".55"/>
+            <rect x="318" y="264" width="77" height="48" rx="6" fill="url(#box)"/><path d="M356 266v44M319 280h75" fill="none" opacity=".55"/>
+            <rect x="412" y="260" width="70" height="52" rx="6" fill="#83d7bf"/><path d="M447 262v48M413 278h68" fill="none" opacity=".55"/>
+          </g>
+          <g fill="#f6bd59"><circle cx="76" cy="70" r="8"/><circle cx="508" cy="70" r="8"/><circle cx="76" cy="324" r="8"/><circle cx="508" cy="324" r="8"/></g>
+          <g transform="translate(410 18)"><rect width="142" height="48" rx="14" fill="#f3fff9"/><circle cx="22" cy="24" r="7" fill="#1ca77f"/><text x="39" y="29" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#163a49">STOCK IN BOND</text></g>
+          <path d="M37 117c21-24 29-35 45-47" fill="none" stroke="#f6bd59" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 9"/>
+          <path d="m75 64 10 4-1 10" fill="none" stroke="#f6bd59" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </section>""")
 
     with st.form("quick_item_search", border=False):
         search_cols = st.columns([4, 1])
@@ -820,47 +880,92 @@ def item_tracker(search: str) -> None:
 
 
 def main() -> None:
-    st.markdown("""<style>
+    st.markdown("""<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <style>
+    .stApp, .stApp button, .stApp input, .stApp textarea, .stApp select,
+    .stApp [data-testid="stMarkdownContainer"], .stApp [data-testid="stWidgetLabel"],
+    .stApp [data-testid="stMetric"], .stApp [data-testid="stDataFrame"],
+    .stApp [data-testid="stTable"] {
+      font-family: "Plus Jakarta Sans", sans-serif !important;
+    }
+    [data-testid="stVegaLiteChart"] svg text { font-family: "Plus Jakarta Sans", sans-serif !important; }
     [data-testid="stSidebar"] { border-right: 1px solid rgba(128,128,128,.16); }
+    [data-testid="stMainBlockContainer"] { padding-top: .5rem; }
+    [data-testid="stElementContainer"]:has([data-testid="stDataFrame"]),
+    [data-testid="stElementContainer"]:has([data-testid="stTable"]),
+    [data-testid="stElementContainer"]:has([data-testid="stVegaLiteChart"]),
+    [data-testid="stElementContainer"]:has([data-testid="stPlotlyChart"]),
+    [data-testid="stElementContainer"]:has([data-testid="stPyplotChart"]),
+    [data-testid="stElementContainer"]:has([data-testid="stDeckGlJsonChart"]) {
+      box-sizing: border-box; padding: .75rem; margin-bottom: .45rem;
+      border: 1px solid rgba(128, 145, 164, .28);
+      border-radius: 14px; background: var(--secondary-background-color);
+      box-shadow: 0 7px 20px rgba(20, 34, 50, .09);
+    }
+    [data-testid="stMetric"] {
+      padding: .9rem 1rem; border: 1px solid rgba(128, 145, 164, .24);
+      border-radius: 15px; background: var(--secondary-background-color);
+      box-shadow: 0 6px 18px rgba(20, 34, 50, .07);
+    }
+    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] {
+      padding: .48rem .62rem; margin: .12rem 0; border: 1px solid transparent;
+      border-radius: 11px; transition: background .15s ease, border-color .15s ease;
+    }
+    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"]:hover {
+      background: rgba(128, 145, 164, .10);
+    }
+    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"]:has([aria-checked="true"]) {
+      background: rgba(240, 107, 79, .12); border-color: rgba(240, 107, 79, .38);
+    }
     </style>""", unsafe_allow_html=True)
     st.session_state.setdefault("navigation", "Overview")
     st.session_state.setdefault("sidebar_search", "Z1000746")
     with st.sidebar:
         st.title("Warehouse")
-        page = st.radio("View", ["Overview", "Warehouse map", "Inventory", "Goods in", "W700 entries", "Stock cards", "Item tracker", "Cell movements", "Removal requests", "Calendar", "Reports"], key="navigation")
+        page_icons = {
+            "Overview": "🏠", "Warehouse map": "🗺️", "Inventory": "📦",
+            "Goods in": "🚚", "W700 entries": "🧾", "Stock cards": "🏷️",
+            "Item tracker": "🔎", "Cell movements": "🔁",
+            "Removal requests": "📤", "Calendar": "📅", "Reports": "📊",
+        }
+        page = st.radio("Navigate", list(page_icons),
+                        format_func=lambda name: f"{page_icons[name]}  {name}", key="navigation")
         search = st.text_input("Item or stack code", disabled=page != "Item tracker", key="sidebar_search")
         if st.button("Refresh data", width="stretch"):
             st.rerun()
         st.caption("Connected to the production database with read-only transactions.")
 
     try:
-        if page == "Overview":
-            item_overview()
-        elif page == "Warehouse map":
-            warehouse_map_page()
-        elif page == "Inventory":
-            inventory_page()
-        elif page == "Goods in":
-            goods_in_page()
-        elif page == "W700 entries":
-            w700_page()
-        elif page == "Stock cards":
-            stock_cards_page()
-        elif page == "Calendar":
-            calendar_page()
-        elif page == "Reports":
-            reports_page()
-        else:
-            if page == "Item tracker":
-                term = search.strip()
-                if term:
-                    item_tracker(term)
-                else:
-                    st.info("Enter an item code or stack code to search.")
-            elif page == "Cell movements":
-                movement_page()
+        with st.spinner(f"Loading {page.lower()} data…", show_time=True):
+            if page == "Overview":
+                item_overview()
+            elif page == "Warehouse map":
+                warehouse_map_page()
+            elif page == "Inventory":
+                inventory_page()
+            elif page == "Goods in":
+                goods_in_page()
+            elif page == "W700 entries":
+                w700_page()
+            elif page == "Stock cards":
+                stock_cards_page()
+            elif page == "Calendar":
+                calendar_page()
+            elif page == "Reports":
+                reports_page()
             else:
-                removals_page()
+                if page == "Item tracker":
+                    term = search.strip()
+                    if term:
+                        item_tracker(term)
+                    else:
+                        st.info("Enter an item code or stack code to search.")
+                elif page == "Cell movements":
+                    movement_page()
+                else:
+                    removals_page()
     except Exception as exc:
         show_connection_error(exc)
 
