@@ -1,0 +1,10 @@
+.env
+.venv/
+.venv-1/
+__pycache__/
+*.pyc
+data/*
+!data/.gitkeep
+reports/
+.streamlit/credentials.toml
+.streamlit/secrets.toml

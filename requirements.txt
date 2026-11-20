@@ -1,0 +1,5 @@
+psycopg[binary]>=3.2,<4
+python-dotenv>=1.0,<2
+rich>=13.7,<15
+streamlit>=1.55,<2
+qrcode[pil]>=7.4,<9
